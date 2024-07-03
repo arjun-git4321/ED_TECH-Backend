@@ -28,7 +28,7 @@ exports.auth=async(req,res,next)=>{
         console.log(err);
         res.status(500).json({
             success:false,
-            message:'error while validationg the token',
+            message:'error while validating the token',
         })
 
     }
