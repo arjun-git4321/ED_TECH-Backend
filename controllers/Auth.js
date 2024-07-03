@@ -1,4 +1,3 @@
-
 // const express=require("express");
 const otpGenarator=require("otp-generator");
 const user=require("../models/User");
@@ -122,7 +121,7 @@ exports.signUp=async (req,res)=>{
         }
 
 
-        const hashPassword=await bcryptjs(password,10);
+        const hashPassword=await bcryptjs.hash(password,10);
 
         const profileDetails=await Profile.create({
             gender,
@@ -182,7 +181,7 @@ exports.Login=async (req,res)=>{
             const payload={
                 email:user.email,
                 id:user._id,
-                role:user.role,
+                accountType:user.accountType,
 
             }
             const token=jwt.sign(payload,process.env.SECRET,{
@@ -193,7 +192,7 @@ exports.Login=async (req,res)=>{
 
 
             const options={
-                expires:new Date(Date.now() + 3*24*60*60*1000);
+                expires:new Date(Date.now() + 3*24*60*60*1000),
                 httpOnly:true,
             }
 
@@ -217,8 +216,25 @@ exports.Login=async (req,res)=>{
     catch(error){
         res.status(500).json({
             success:false,
-            message:"login failed please login later",
+            message:"login failed",
         })
 
     }
+}
+exports.passwordChange=async(req,res)=>{
+    try{
+        const {password}=req.body;
+        //get old password new password 
+        //validate those passwords
+
+        //update those passwords in db
+
+        //send mail to the password is updated
+
+
+    }
+    catch(error){
+
+    }
+
 }
