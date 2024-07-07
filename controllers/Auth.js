@@ -131,7 +131,7 @@ exports.signUp=async (req,res)=>{
         })
 
 
-        const user=await User.create({
+        const user=await user.create({
             firstName,
             lastName,
             email,
