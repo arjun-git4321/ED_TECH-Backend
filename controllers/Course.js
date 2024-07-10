@@ -1,5 +1,5 @@
 const User=require("../models/User");
-const Tag=require("../models/Tag");
+const Category=require("../models/Category");
 const Course=require("../models/Course");
 
 const {imageUploadCloudinary}=require("../utils/imageUploader")
@@ -20,7 +20,7 @@ exports.courseCreate=async(req,res)=>{
             });
         }
 
-        const userId=re.user.id;
+        const userId=req.user.id;
         const instructorDetails=await User.findById(userId);
 
         console.log("instructor details", instructorDetails);
@@ -33,11 +33,11 @@ exports.courseCreate=async(req,res)=>{
             });
         }
 
-        const tagDetails=await Tag.findById(tag)
-        if(!tagDetails){
+        const categoryDetails=await Category.findById(Category)
+        if(!categoryDetails){
             return res.status(400).json({
                 sucess:false,
-                message:"tag details not found",
+                message:"category details not found",
             });
         }
 
@@ -50,7 +50,7 @@ exports.courseCreate=async(req,res)=>{
             whatYouWillLearn:whatYouWillLearn,
             instructor:instructorDetails._id,
             price,
-            tag:tagDetails._id,
+            category:categoryDetails._id,
             thumbnailImage:thumbnailImage.secure_url,
         });
 
