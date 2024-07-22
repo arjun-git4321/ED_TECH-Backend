@@ -18,7 +18,7 @@ exports.createSubSection=async(req,res)=>{
         }
         // const checkVideo=video.TypeOf(["mp4","hd"]).split('.').exec();
 
-        const saveCloudiary=await imageUploadCloudinary(videoFile,process.env.FILE_NAME);
+        const saveCloudiary=await imageUploadCloudinary(video,process.env.FILE_NAME);
         console.log(saveCloudiary);
 
         const subSectionDetails=await SubSection.create({
@@ -29,7 +29,7 @@ exports.createSubSection=async(req,res)=>{
 
         });
 
-        const updateSection=await findByIdAndUpdate({_id:sectionId},{$push:{subSection:subSectionDetails._id}},{new:true})
+        const updateSection=await Section.findByIdAndUpdate({_id:sectionId},{$push:{subSection:subSectionDetails._id}},{new:true})
 
         res.status(200).json({
             success:true,

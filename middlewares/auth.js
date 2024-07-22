@@ -77,7 +77,7 @@ exports.isInstructor=async(req,res,next)=>{
     }
 }
 
-exports.Admin=(req,res,next)=>{
+exports.isAdmin=(req,res,next)=>{
     try{
         if(req.user.accountType !== "Admin"){
             return res.status(401).json({

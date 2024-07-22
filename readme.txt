@@ -1,7 +1,7 @@
 In this project we have created a all the models in model folder and user schema in User.js
 and realtions too.
 Here we see in this project some folders are using to ,
-    configurations folder for DataBase connection
+    configurations folder for DataBase connection && razorpay connection used in the payments setup
     Models folder for user schemas and models
     routes folder is routing and caling of handlers
     Index.js is running and starting of our server
@@ -37,10 +37,29 @@ Here we see in this project some folders are using to ,
                 *in this create one subSection and save that id into the section schema
             *deleteSubSection
                 *in this delete one section taking that specific id
+        Profile.js
+            *updateProfile
+                *in this update profile and save those profile detailes into the addition profile schema
+            *deleteProfile
+                *in this delete profile with the profile id
+            *GetAllusers
+                *in this get all users from the given user id
+        Payments.js
+            *capturePAyment
+                *in this student capture the payment before checking the student is allready enrolled that course or not
+            *verifySignature
+                *In this verify the student signature and razorpay signature
+
 
 
     -utils folder 
-        mailSender file inside the logic of mails sending
-
+        mailSender 
+            *file inside the logic of mails sending
         imageUploader
             *in this configurations to save the images into the cloudinary
+
+    mails/templates
+        *courseEnrollmentTemplate
+            *in this course enrollment mail structure
+        *emailVerificationTemplate
+            *in this emailVerificationTemplate mail structure

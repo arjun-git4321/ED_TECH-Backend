@@ -29,7 +29,7 @@ async function verificationMailSender(email,otp){
     }
 
 }
-otpSchema.Pre("save", async function(next){
+otpSchema.pre("save", async function(next){
     await verificationMailSender(this.name,this.otp);
     next();
 })

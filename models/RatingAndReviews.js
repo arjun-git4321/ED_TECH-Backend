@@ -15,6 +15,12 @@ const ratingAndReviewSchema=new mongoose.model({
         type:Number,
         required:true,
     },
+    course:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"Course",
+        index:true,
+    },
 
 });
 module.exports=mongoose.model("RatingAndReview",ratingAndReviewSchema);
