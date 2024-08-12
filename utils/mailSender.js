@@ -11,7 +11,7 @@ const sendMail=async(email,title,body)=>{
         });
 
         let info= await transporter.sendMail({
-            from:'Arjunmedpati2000@email.com',
+            from:'Arjun - StudyNotion Application',
             to:`${email}`,
             subject:`${title}`,
             html:`${body}`,
@@ -19,7 +19,6 @@ const sendMail=async(email,title,body)=>{
         });
         console.log(info);
         return info;
-
     }
     catch(err){
         console.log(err.message);

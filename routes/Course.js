@@ -35,12 +35,14 @@ router.post("/showAllCourses",auth,isInstructor,showAllCourses);
 router.post("/getCourseDetails",auth,isInstructor,getCourseDetails);
 
 
+
 //category only created by admin, add admin middleware
 router.post("/createCategory",auth,isAdmin,categoriesCreate);
 router.get("/getAllCategories",getAllCategories);
 router.post("/categoryPageDetails",categoryPageDetails);
 
 //ratingAndReview
+
 
 router.post("/creteRatingAndReview",auth,isStudent,creteRatingAndReview);
 router.get("/getAverageRating",getAverageRating);

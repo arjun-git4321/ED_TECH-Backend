@@ -2,7 +2,7 @@ const {instance}=require("../configurations/razorpay");
 const User=require("../models/User");
 const Course=require("../models/Course");
 const mailSender=require("../utils/mailSender");
-const {courseEnrollmentEmail}=require("../mail/templates/courseEnrollmentEmail");
+const courseEnrollmentEmail=require('../mail/courseEnrollmentEmail');
 
 
 

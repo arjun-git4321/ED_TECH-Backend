@@ -1,6 +1,6 @@
 const Section=require("../models/Section");
 const Course=require("../models/Course");
-const { findByIdAndDelete } = require("../models/Category");
+// const { findByIdAndDelete } = require("../models/Category");
 
 
 exports.createSection=async(req,res)=>{
@@ -21,6 +21,12 @@ exports.createSection=async(req,res)=>{
                                                                         }
                                                                     },
                                                                         {new:true},)
+                                                                        .populate({
+                                                                            path:"courseContent",
+                                                                            populate: {
+                                                                                path: "subSection",
+                                                                            },
+                                                                        })
 
          res.status(200).json({
             success:true,
@@ -65,9 +71,9 @@ exports.updateSection=async (req,res)=>{
 
 exports.deleteSection=async(req,res)=>{
     try{
-        const {sectionId}=req.params;
+        const {sectionId}=req.body;
 
-        await findByIdAndDelete({sectionId});
+        await Section.findByIdAndDelete(sectionId);
         res.json({
             success:true,
             message:"section delete successfully",

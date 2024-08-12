@@ -1,5 +1,6 @@
 const mongoose=require("mongoose");
 const sendMail = require("../utils/mailSender");
+const emailTemplate=require("../mail/emailVerificationTemplate");
 
 const otpSchema=new mongoose.Schema({
     email:{
@@ -13,24 +14,32 @@ const otpSchema=new mongoose.Schema({
     createdAt:{
         type:Date,
         default:Date.now(),
-        expires:5*60,
+        expires:60*5,
     },
 });
 
 async function verificationMailSender(email,otp){
-    try{
-        let mails=await sendMail(email,otp);
-        console.log(mails);
-
-    }
-    catch(err){
-        console.log(err);
-        throw err;
-    }
+    try {
+		const mailResponse = await sendMail(
+			email,
+			"Verification Email",
+			emailTemplate(otp)
+		);
+		console.log("Email sent successfully: ", mailResponse.response);
+	} catch (error) {
+		console.log("Error occurred while sending email: ", error);
+		throw error;
+	}
 
 }
-otpSchema.pre("save", async function(next){
-    await verificationMailSender(this.name,this.otp);
-    next();
-})
-module.exports=mongoose.model("OTP",otpSchema);
+otpSchema.pre("save", async function (next) {
+	console.log("New document saved to database");
+
+	// Only send an email when a new document is created
+	if (this.isNew) {
+		await verificationMailSender(this.email, this.otp);
+	}
+	next();
+});
+const OTP=mongoose.model("OTP",otpSchema);
+module.exports=OTP;

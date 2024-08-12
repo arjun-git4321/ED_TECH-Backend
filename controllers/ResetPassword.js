@@ -1,4 +1,4 @@
-const user=require("../models/User");
+const User=require("../models/User");
 const crypto=require("crypto");
 const mailSender=require("../utils/mailSender");
 const bcryptjs=require("bcryptjs");
@@ -9,7 +9,7 @@ exports.passwordResetToken=async(req,res)=>{
         //requesting email
         const {email}=req.body;
 
-        const existEmail=await user.findOne({email:email});
+        const existEmail=await User.findOne({email:email});
         if(!existEmail){
             return res.json({
                 success:false,
@@ -18,7 +18,7 @@ exports.passwordResetToken=async(req,res)=>{
         }
         const token=crypto.randomUUID();
 
-        const updatedUser=await user.findOneAndUpdate(
+        const updatedUser=await User.findOneAndUpdate(
                                                         {email:email},
                                                         {token:token,
                                                         resetPasswordExpires:Date.now() + 5*60*1000,
@@ -29,6 +29,7 @@ exports.passwordResetToken=async(req,res)=>{
         await mailSender(email,`Password reset link ${url}`);
         return res.json({
             success:true,
+            data:url,
             message:'email sent successfully,please check and update the password',
         })
 
@@ -45,20 +46,20 @@ exports.passwordResetToken=async(req,res)=>{
 }
 
 
-exports.resetPasowrdNow=async(req,res)=>{
+exports.resetPasswordNow=async(req,res)=>{
     try{
         //data fetching from the body
         const {password,confirmPassword,token}=req.body;
         if(password !== confirmPassword){
             return res.json({
                 success:false,
-                message:'password doesnot match',
+                message:'password does not match',
             })
         }
 
 
         //get user details from the db using token
-        const userDetails=await user.findOne({token:token});
+        const userDetails=await User.findOne({token:token});
         if(!userDetails){
             return res.json({
                 success:false,
@@ -74,7 +75,7 @@ exports.resetPasowrdNow=async(req,res)=>{
         }
         const hashPassword=await bcryptjs.hash(password,10);
 
-        await user.findOneAndUpdate(
+        await User.findOneAndUpdate(
             {token:token},
             {password:hashPassword},
             {new:true}

@@ -10,7 +10,7 @@ const courseSchema=new mongoose.Schema({
     instructor:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
-        ref:"User",
+        ref:"user",
     },
     whatYouWillLearn:{
         type:String,
@@ -18,7 +18,7 @@ const courseSchema=new mongoose.Schema({
     courseContent:[
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref:"Section"
+            ref:"Section",
         }
     ],
     ratingsAndReviews:[
@@ -40,7 +40,7 @@ const courseSchema=new mongoose.Schema({
     studentEnrolled:[
         {
         type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
+        ref:"user",
         required:true,
     },
 ],

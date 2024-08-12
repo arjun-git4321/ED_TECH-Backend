@@ -3,7 +3,7 @@ const router=express.Router();
 
 
 const {sendOpt,signUp,Login,}=require("../controllers/Auth");
-const {passwordResetToken,resetPasowrdNow}=require("../controllers/ResetPassword");
+const {passwordResetToken,resetPasswordNow}=require("../controllers/ResetPassword");
 const {auth}=require("../middlewares/auth");
 
 
@@ -16,3 +16,10 @@ router.post("/signUp",signUp);
 router.post("/login",Login);
 
 router.post("/sendOtp",sendOpt);
+
+//password resetToken & resetPasswordNow
+router.post("/passwordResetToken",passwordResetToken);
+
+router.post("/updatePasswordNow",resetPasswordNow);
+
+module.exports=router;

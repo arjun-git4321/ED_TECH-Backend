@@ -3,24 +3,23 @@ const Category=require("../models/Category");
 const Course=require("../models/Course");
 
 const {imageUploadCloudinary}=require("../utils/imageUploader");
-const SubSection = require("../models/SubSection");
+// const SubSection = require("../models/SubSection");
 
 
 exports.courseCreate=async(req,res)=>{
     try{
-        const {courseName,courseDescription,whatYouWillLearn,price,tag}=req.body;
+        const {courseName,courseDescription,whatYouWillLearn,price,category,tag}=req.body;
 
 
-        const thumbnail=req.body.thumbnailImage;
+        const thumbnail=req.files.thumbnailImage;
 
         // validation
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !thumbnail || !tag){
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !thumbnail || !category || !tag){
             return res.status(400).json({
                 success:false,
                 message:"All fields are mandatory",
             });
         }
-
         const userId=req.user.id;
         const instructorDetails=await User.findById(userId);
 
@@ -34,7 +33,7 @@ exports.courseCreate=async(req,res)=>{
             });
         }
 
-        const categoryDetails=await Category.findById(Category)
+        const categoryDetails=await Category.findById(category)
         if(!categoryDetails){
             return res.status(400).json({
                 sucess:false,
@@ -42,7 +41,7 @@ exports.courseCreate=async(req,res)=>{
             });
         }
 
-        const thumbnailImage=await imageUploadCloudinary.uploader.upload(thumbnail, process.env.FOLDER_NAME);
+        const thumbnailImage=await imageUploadCloudinary(thumbnail, process.env.FOLDER_NAME);
 
 
         const newCourse=await Course.create({
@@ -50,6 +49,7 @@ exports.courseCreate=async(req,res)=>{
             courseDescription,
             whatYouWillLearn:whatYouWillLearn,
             instructor:instructorDetails._id,
+            tag:tag,
             price,
             category:categoryDetails._id,
             thumbnailImage:thumbnailImage.secure_url,
@@ -70,7 +70,7 @@ exports.courseCreate=async(req,res)=>{
         res.status(200).json({
             success:true,
             message:'Course created successfuly',
-            data:newCourse._id,
+            data:newCourse,
         })
 
     }
@@ -125,14 +125,14 @@ exports.getCourseDetails=async(req,res)=>{
             }
         })
         .populate("category")
-        .populate("ratingsAndReviews")
+        // .populate("ratingsAndReviews")
         .populate({
             path:"courseContent",
             populate:{
-                path:"SubSection", 
-            }
+                path:"subSection", 
+            },
         })
-        exec();
+        .exec();
 
 
         if(!courseDetails){
@@ -142,7 +142,7 @@ exports.getCourseDetails=async(req,res)=>{
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             success:true,
             message:`course successfully fetched to this id ${courseId}`,
             data:courseDetails,

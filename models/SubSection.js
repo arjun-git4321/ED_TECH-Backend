@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 
 
-const subSectionSchema=new mongoose.model({
+const subSectionSchema=new mongoose.Schema({
     title:{
         type:String,
     },

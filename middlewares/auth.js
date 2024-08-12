@@ -1,26 +1,30 @@
 const jwt=require("jsonwebtoken");
 require("dotenv").config();
-const user=require("../models/User");
+const User=require("../models/User");
 
 
 exports.auth=async(req,res,next)=>{
     try{
-        const token=req.cookies.token || req.token.body || req.header("Authorisation").replace("Bearer ","");
+        // console.log("coming token",req.cookies);
+        const token=req.cookies?.token || req.body?.token || req.header("Authorization").replace("Bearer ","");
+
 
         if(!token){
-            res.status(400).json({
+            return res.status(401).json({
                 success:false,
-                message:'token not found',
+                message:'token is missing',
             })
         }
-        const decode= jwt.verify(token,process.env.JWT_SECRET);
+
+
+        const decode= jwt.verify(token, process.env.JWT_SECRET);
         console.log(decode)
         req.user=decode;
 
-        res.staus(400).json({
-            success:false,
-            message:"token is invalid",
-        })
+        // res.status(400).json({
+        //     success:false,
+        //     message:"token is invalid",
+        // })
         next();
 
     }
@@ -37,7 +41,7 @@ exports.auth=async(req,res,next)=>{
 
 exports.isStudent=async(req,res,next)=>{
     try{
-        if(req.user.acoountType !== "Student"){
+        if(req.user.accountType !== "Student"){
             return res.status(401).json({
                 success:false,
                 message:'this is protected route for student',
@@ -47,7 +51,7 @@ exports.isStudent=async(req,res,next)=>{
 
     }
     catch(error){
-        res.status(500).json({
+        return res.status(500).json({
             success:false,
             message:'student type cannot be verified,please try again later',
         });
@@ -59,7 +63,7 @@ exports.isStudent=async(req,res,next)=>{
 
 exports.isInstructor=async(req,res,next)=>{
     try{
-        if(req.user.accountType !== "isInstructor"){
+        if(req.user.accountType !== "Instructor"){
             return res.status(401).json({
                 success:false,
                 message:'this is protected route for instructor',
@@ -89,7 +93,7 @@ exports.isAdmin=(req,res,next)=>{
 
     }
     catch(error){
-        console.log(eror);
+        console.log(error);
         req.status(500).json({
             success:false,
             message:"admin type cannot be verified, please try again later",

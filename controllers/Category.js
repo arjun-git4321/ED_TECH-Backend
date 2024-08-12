@@ -4,19 +4,19 @@ exports.categoriesCreate=async (req,res)=>{
     try{
         const {name,description}=req.body;
 
-        if(!name || description){
-            res.status(400).json({
+        if(!name || !description){
+             res.status(400).json({
                 success:false,
                 message:'All fields are mandatory',
             });
         }
 
         // create entry in db
-        const tagDetails=await Category.create({
+        const chategoryDetails=await Category.create({
             name:name,
             description:description,
         });
-        console.log(tagDetails);
+        console.log(chategoryDetails);
 
         return res.status(200).json({
             success:true,
@@ -38,10 +38,10 @@ exports.categoriesCreate=async (req,res)=>{
 
 exports.getAllCategories=async (req,res)=>{
     try{
-        const tags= await Category.find({},{name:true,description:true});
+        const categories= await Category.find({},{name:true,description:true});
         res.status(200).json({
             success:false,
-            tags,
+            categories,
             message:'All categories fetched successfully',
         })
         

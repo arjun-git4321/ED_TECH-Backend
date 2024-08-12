@@ -8,9 +8,9 @@ exports.createSubSection=async(req,res)=>{
     try{
         const {sectionId,title,timeDuration,description}=req.body;
 
-        const video=req.files.videoFile;
+        const video=req.files.video;
 
-        if(!sectionId,!title || !timeDuration || !description){
+        if(!sectionId || !title || !timeDuration || !description || !video){
             return res.status(400).json({
                 success:false,
                 message:"fill all the properties",
@@ -30,9 +30,11 @@ exports.createSubSection=async(req,res)=>{
         });
 
         const updateSection=await Section.findByIdAndUpdate({_id:sectionId},{$push:{subSection:subSectionDetails._id}},{new:true})
+                                                            .populate("subSection")
 
         res.status(200).json({
             success:true,
+            data:updateSection,
             message:'successfully created subSection',
         })
 
